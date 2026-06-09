@@ -42,7 +42,7 @@
         "description": "Domain name for the OpenVidu Deployment. Blank will generate default domain"
       }
     },
-    "domainLabel": {
+    "domainNameLabel": {
       "type": "string",
       "defaultValue": ""
     },
