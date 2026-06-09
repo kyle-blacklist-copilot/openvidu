@@ -113,9 +113,9 @@
                             "visible": true
                         },
                         {
-                            "name": "domainLabel",
+                            "name": "domainNameLabel",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Domain Label",
+                            "label": "Domain Name Label",
                             "subLabel": "\nDomain label for the OpenVidu Deployment.",
                             "defaultValue": "",
                             "toolTip": "",
