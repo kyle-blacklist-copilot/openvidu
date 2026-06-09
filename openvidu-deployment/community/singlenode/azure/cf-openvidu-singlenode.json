@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.37.4.10188",
-      "templateHash": "12416756080410278202"
+      "version": "0.42.1.51946",
+      "templateHash": "12391216195075880467"
     }
   },
   "parameters": {
@@ -44,7 +44,10 @@
     },
     "domainNameLabel": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "",
+      "metadata": {
+        "description": "DNS label for the Azure public IP address. Blank will use the stack name."
+      }
     },
     "ownPublicCertificate": {
       "type": "string",
@@ -114,7 +117,7 @@
   },
   "variables": {
     "isEmptyIp": "[equals(parameters('publicIpAddressObject').newOrExistingOrNone, 'none')]",
-    "isEmptyDomain": "[equals(parameters('domainName'), '')]",
+    "publicIpDomainNameLabel": "[if(equals(parameters('domainNameLabel'), ''), toLower(parameters('stackName')), toLower(parameters('domainNameLabel')))]",
     "instanceTypeLower": "[toLower(parameters('instanceType'))]",
     "isArm64Instance": "[or(or(or(or(or(or(or(contains(variables('instanceTypeLower'), 'ps_v'), contains(variables('instanceTypeLower'), 'pls_v')), contains(variables('instanceTypeLower'), 'pds_v')), contains(variables('instanceTypeLower'), 'plds_v')), contains(variables('instanceTypeLower'), 'psv')), contains(variables('instanceTypeLower'), 'plsv')), contains(variables('instanceTypeLower'), 'pdsv')), contains(variables('instanceTypeLower'), 'pldsv'))]",
     "ubuntuSku": "[if(variables('isArm64Instance'), 'server-arm64', 'server')]",
@@ -316,8 +319,7 @@
         "publicIPAddressVersion": "IPv4",
         "publicIPAllocationMethod": "Static",
         "dnsSettings": {
-          "domainNameLabel": "[if(variables('isEmptyDomain'), toLower(format('{0}', parameters('stackName'))), null())]",
-          "fqdn": "[if(variables('isEmptyDomain'), null(), parameters('domainName'))]"
+          "domainNameLabel": "[variables('publicIpDomainNameLabel')]"
         }
       }
     },

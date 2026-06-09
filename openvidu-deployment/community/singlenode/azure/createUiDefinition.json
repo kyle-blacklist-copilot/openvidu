@@ -116,19 +116,14 @@
                             "name": "domainNameLabel",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Domain Name Label",
-                            "subLabel": "\nDomain label for the OpenVidu Deployment.",
+                            "subLabel": "\nDNS label for the Azure public IP address. Blank will use the stack name.",
                             "defaultValue": "",
                             "toolTip": "",
                             "constraints": {
                                 "required": false,
-                                "regex": "",
-                                "validationMessage": "Please enter a valid domain name or leave it blank to generate",
-                                "validations": [
-                                    {
-                                        "isValid": "[if(equals(steps('parameters SSL').certificateType, 'owncert'), not(empty(steps('parameters SSL').domainName)), true)]",
-                                        "message": "You need to fill this parameter because you've selected owncert certificate type."
-                                    }
-                                ]
+                                "regex": "^$|^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+                                "validationMessage": "Please enter a valid DNS label or leave it blank to use the stack name.",
+                                "validations": []
                             },
                             "infoMessages": [],
                             "visible": true
@@ -367,6 +362,7 @@
                 "certificateType": "[steps('parameters SSL').certificateType]",
                 "publicIpAddressObject": "[steps('parameters SSL').publicIpAddressObject]",
                 "domainName": "[steps('parameters SSL').domainName]",
+                "domainNameLabel": "[steps('parameters SSL').domainNameLabel]",
                 "ownPublicCertificate": "[steps('parameters SSL').ownPublicCertificate]",
                 "ownPrivateCertificate": "[steps('parameters SSL').ownPrivateCertificate]",
                 "initialMeetAdminPassword": "[steps('parameters MEET').initialMeetAdminPassword]",

@@ -21,6 +21,9 @@ param publicIpAddressObject object
 @description('Domain name for the OpenVidu Deployment. Blank will generate default domain')
 param domainName string = ''
 
+@description('DNS label for the Azure public IP address. Blank will use the stack name.')
+param domainNameLabel string = ''
+
 @description('If certificate type is \'owncert\', this parameter will be used to specify the public certificate in base64 format')
 param ownPublicCertificate string = ''
 
@@ -55,8 +58,7 @@ param additionalInstallFlags string = ''
 //Condition for ipValid if is filled
 var isEmptyIp = publicIpAddressObject.newOrExistingOrNone == 'none'
 
-//Condition for the domain name
-var isEmptyDomain = domainName == ''
+var publicIpDomainNameLabel = domainNameLabel == '' ? toLower(stackName) : toLower(domainNameLabel)
 
 // ARM64 instances are detected by checking for 'p' in the instance type name pattern.
 // Azure ARM-based VMs use 'p' to indicate ARM processors (Ampere Altra, Microsoft Cobalt, etc.)
@@ -801,8 +803,7 @@ resource publicIP_OV_ifNew 'Microsoft.Network/publicIPAddresses@2023-11-01' = if
     publicIPAddressVersion: 'IPv4'
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: isEmptyDomain ? toLower('${stackName}') : null
-      fqdn: isEmptyDomain ? null : domainName
+      domainNameLabel: publicIpDomainNameLabel
     }
   }
 }
